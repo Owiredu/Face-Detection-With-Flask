@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>FLASK FACE DETECTION</title>
+    <link rel="stylesheet" href="{{url_for('static', filename='assets/bootstrap/css/bootstrap.min.css')}}">
+</head>
+
+<body>
+    <div class="card-group container">
+        <form class="card" style="margin: 20px;" method="POST" enctype="multipart/form-data"
+            action="{{url_for('upload')}}">
+            {% if img_path %}
+            <img src="{{ url_for('static', filename='assets/images/' + img_path.split(':')[0])}}" id="src-image"
+                class="img-fluid card-img-top w-100 d-block" style="height: 480px;width: 640px;">
+            {% else %}
+            <img src="{{ url_for('static', filename='assets/images/default_img.jpg')}}" id="src-image"
+                class="img-fluid card-img-top w-100 d-block" style="height: 480px;width: 640px;">
+            {% endif %}
+            <div class="card-body" style="margin: 20px;">
+                <h4 class="card-title">Input</h4>
+                <p class="card-text" id="src-image-text">Original Image</p>
+                <div class="custom-file" style="z-index: 0;">
+                    <label class="custom-file-label" for="customFile">Choose file</label>
+                    <input class="custom-file-input" type="file" name="file" id="file">
+                </div>
+                {% if img_path %}
+                <button class="btn btn-primary" type="submit" style="margin: 5px;" disabled>Detect Faces</button>
+                {% else %}
+                <button class="btn btn-primary" type="submit" style="margin: 5px;">Detect Faces</button>
+                {% endif %}
+                <a class="btn btn-primary" type="button" href="{{url_for('index')}}">Reset Image</a>
+            </div>
+        </form>
+        <div class="card" style="margin: 20px;">
+            {% if img_path %}
+            {% if img_path.split(':')[1].startswith('result_img') %}
+            <img src="{{ url_for('static', filename='assets/images/' + img_path.split(':')[1])}}"
+                class="img-fluid card-img-top w-100 d-block" id="dest-image" style="width: 640px;height: 480px;">
+            {% else %}
+            <img src="{{ url_for('static', filename='assets/images/default_img.jpg')}}"
+                class="img-fluid card-img-top w-100 d-block" id="dest-image" style="width: 640px;height: 480px;">
+            {% endif %}
+            {% else %}
+            <img src="{{ url_for('static', filename='assets/images/default_img.jpg')}}"
+                class="img-fluid card-img-top w-100 d-block" id="dest-image" style="width: 640px;height: 480px;">
+            {% endif %}
+            <div class="card-body" style="margin-top: 20px;">
+                <h4 class="card-title">Result</h4>
+                <p class="card-text" id="dest-image-text">
+                    Processed Image <br />
+                    {% if img_path %}
+                    {{ img_path.split(':')[1] }}
+                    {% endif %}
+                </p>
+                <!-- <a class="btn btn-primary" type="button" href="{{url_for('index')}}">Reset Image</a> -->
+            </div>
+        </div>
+    </div>
+    <script src="{{url_for('static', filename='assets/js/jquery.min.js')}}"></script>
+    <script src="{{url_for('static', filename='assets/bootstrap/js/bootstrap.min.js')}}"></script>
+    <script src="{{url_for('static', filename='assets/js/custom.js')}}"></script>
+    </script>
+</body>
+
+</html>
