@@ -64,7 +64,7 @@ def upload():
             # return the result page
             return redirect(url_for('result', img_path=soure_img_name + ":" + output))
     # return the index page if the form is not submitted rightly
-    redirect(url_for('index'))
+    return redirect(url_for('index'))
 
 
 def detect_faces():
