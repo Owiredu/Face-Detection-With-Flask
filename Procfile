@@ -1,1 +1,1 @@
-web: gunicorn face_detection_index:app
+web: gunicorn face_detection_index:app --log-file - --log-level debug
