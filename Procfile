@@ -1,1 +1,1 @@
-web: gunicorn index:app
+web: gunicorn face_detection_index:app
