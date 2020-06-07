@@ -16,7 +16,6 @@ CASCADE_CLASSIFIER_NAME = 'haarcascade_frontalface_alt.xml'
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_DIR
-app.config["CACHE_TYPE"] = "null"
 
 
 @app.route('/')
