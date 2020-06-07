@@ -22,13 +22,17 @@
             <div class="card-body" style="margin: 20px;">
                 <h4 class="card-title">Input</h4>
                 <p class="card-text" id="src-image-text">Original Image</p>
-                <div class="custom-file" style="z-index: 0;">
-                    <label class="custom-file-label" for="customFile">Choose file</label>
-                    <input class="custom-file-input" type="file" name="file" id="file">
-                </div>
                 {% if img_path %}
+                <div class="custom-file" style="z-index: 0;">
+                    <label class="custom-file-label" for="customFile" disabled>Choose file</label>
+                    <input class="custom-file-input" type="file" name="file" id="file" disabled>
+                </div>
                 <button class="btn btn-primary" type="submit" style="margin: 5px;" disabled>Detect Faces</button>
                 {% else %}
+                <div class="custom-file" style="z-index: 0;">
+                    <label class="custom-file-label" for="customFile" enabled>Choose file</label>
+                    <input class="custom-file-input" type="file" name="file" id="file" enabled>
+                </div>
                 <button class="btn btn-primary" type="submit" style="margin: 5px;">Detect Faces</button>
                 {% endif %}
                 <a class="btn btn-primary" type="button" href="{{url_for('index')}}">Reset Image</a>
@@ -55,7 +59,6 @@
                     {{ img_path.split(':')[1] }}
                     {% endif %}
                 </p>
-                <!-- <a class="btn btn-primary" type="button" href="{{url_for('index')}}">Reset Image</a> -->
             </div>
         </div>
     </div>
