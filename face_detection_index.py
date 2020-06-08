@@ -1,3 +1,4 @@
+from mtcnn.mtcnn import MTCNN
 from flask import Flask, render_template, url_for, redirect, request
 from werkzeug.utils import secure_filename
 from flask.helpers import flash
@@ -60,16 +61,17 @@ def upload():
             file.save(os.path.join(
                 app.config['UPLOAD_FOLDER'], soure_img_name))
             # detect faces
-            output = detect_faces()
+            output = detect_faces_mtcnn()
             # return the result page
             return redirect(url_for('result', img_path=soure_img_name + ":" + output))
     # return the index page if the form is not submitted rightly
     return redirect(url_for('index'))
 
 
-def detect_faces():
+def detect_faces_haar():
     """
-    Detects faces in images and returns the image with the detected face dimensions
+    Detects faces in images and returns the image with the detected face dimensions 
+    using haarcascades
     """
     # read src image
     src_img_name = url_for('static', filename=os.path.join(
@@ -94,6 +96,39 @@ def detect_faces():
     timestamp = get_timestamp()
     img_name = RESULT_IMG_NAME_PREFIX + "_" + timestamp + IMG_FILE_EXT
     # save the file
+    cv2.imwrite(os.path.join(
+        app.config['UPLOAD_FOLDER'], img_name), frame)
+    # return the filename
+    return img_name
+
+
+def detect_faces_mtcnn():
+    """
+    Detects faces using Multi-Task Cascaded Convolutional Neural Network
+    """
+    # read src image
+    src_img_name = url_for('static', filename=os.path.join(
+        app.config['UPLOAD_FOLDER'], DEFAULT_IMG_NAME))
+    imgs = os.listdir(app.config['UPLOAD_FOLDER'])
+    for name in imgs:
+        if name.startswith('src_img'):
+            src_img_name = name
+            break
+    frame = cv2.cvtColor(cv2.imread(os.path.join(
+        app.config['UPLOAD_FOLDER'], src_img_name)), cv2.COLOR_BGR2RGB)
+    # detect the faces
+    detector = MTCNN()
+    faces_results = detector.detect_faces(frame)
+    # return nothing if no face is detected
+    if len(faces_results) == 0:
+        return 'NO FACE(S) DETECTED'
+    for result in faces_results:
+        rectangle(frame, result['box'])
+    # create suffix for image filename with format year_month_dayOfMonth_hour_minute_seconds
+    timestamp = get_timestamp()
+    img_name = RESULT_IMG_NAME_PREFIX + "_" + timestamp + IMG_FILE_EXT
+    # save the file
+    frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
     cv2.imwrite(os.path.join(
         app.config['UPLOAD_FOLDER'], img_name), frame)
     # return the filename
@@ -142,4 +177,4 @@ def allowed_file(filename):
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8000, debug=True)
+    app.run(host='0.0.0.0', port=8000, debug=False, threaded=False)
