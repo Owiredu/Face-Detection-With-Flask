@@ -1,12 +1,13 @@
-#from mtcnn.mtcnn import MTCNN
 from flask import Flask, render_template, url_for, redirect, request
 from werkzeug.utils import secure_filename
 from flask.helpers import flash
 import os
 import cv2
 import time
+from mtcnn.mtcnn import MTCNN
 
 
+# create all the constants
 UPLOAD_DIR = 'static/assets/images'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 IMG_FILE_EXT = '.jpg'
@@ -14,6 +15,7 @@ SRC_IMG_NAME_PREFIX = 'src_img'
 RESULT_IMG_NAME_PREFIX = 'result_img'
 DEFAULT_IMG_NAME = 'default_img' + IMG_FILE_EXT
 CASCADE_CLASSIFIER_NAME = 'haarcascade_frontalface_alt.xml'
+
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_DIR
@@ -32,7 +34,9 @@ def result(img_path):
     """
     Opens the results page
     """
-    return render_template('index.html', img_path=img_path)
+    # split string into src_img_name and result_img_name
+    img_path_l = img_path.split(':')
+    return render_template('index.html', img_path=img_path_l)
 
 
 @app.route('/upload', methods=['GET', 'POST'])
@@ -61,7 +65,7 @@ def upload():
             file.save(os.path.join(
                 app.config['UPLOAD_FOLDER'], soure_img_name))
             # detect faces
-            output = detect_faces_haar()
+            output = detect_faces_mtcnn()
             # return the result page
             return redirect(url_for('result', img_path=soure_img_name + ":" + output))
     # return the index page if the form is not submitted rightly

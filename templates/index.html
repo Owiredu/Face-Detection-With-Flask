@@ -13,7 +13,7 @@
         <form class="card" style="margin: 20px;" method="POST" enctype="multipart/form-data"
             action="{{url_for('upload')}}">
             {% if img_path %}
-            <img src="{{ url_for('static', filename='assets/images/' + img_path.split(':')[0])}}" id="src-image"
+            <img src="{{ url_for('static', filename='assets/images/' + img_path[0])}}" id="src-image"
                 class="img-fluid card-img-top w-100 d-block" style="height: 480px;width: 640px;">
             {% else %}
             <img src="{{ url_for('static', filename='assets/images/default_img.jpg')}}" id="src-image"
@@ -40,8 +40,8 @@
         </form>
         <div class="card" style="margin: 20px;">
             {% if img_path %}
-            {% if img_path.split(':')[1].startswith('result_img') %}
-            <img src="{{ url_for('static', filename='assets/images/' + img_path.split(':')[1])}}"
+            {% if img_path[-1].startswith('result_img') %}
+            <img src="{{ url_for('static', filename='assets/images/' + img_path[-1])}}"
                 class="img-fluid card-img-top w-100 d-block" id="dest-image" style="width: 640px;height: 480px;">
             {% else %}
             <img src="{{ url_for('static', filename='assets/images/default_img.jpg')}}"
@@ -56,7 +56,7 @@
                 <p class="card-text" id="dest-image-text">
                     Processed Image <br />
                     {% if img_path %}
-                    {{ img_path.split(':')[1] }}
+                    {{ img_path[-1] }}
                     {% endif %}
                 </p>
             </div>
