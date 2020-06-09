@@ -4,7 +4,7 @@ from flask.helpers import flash
 import os
 import cv2
 import time
-from mtcnn.mtcnn import MTCNN
+#from mtcnn.mtcnn import MTCNN
 
 
 # create all the constants
@@ -65,7 +65,7 @@ def upload():
             file.save(os.path.join(
                 app.config['UPLOAD_FOLDER'], soure_img_name))
             # detect faces
-            output = detect_faces_mtcnn()
+            output = detect_faces_haar()
             # return the result page
             return redirect(url_for('result', img_path=soure_img_name + ":" + output))
     # return the index page if the form is not submitted rightly
