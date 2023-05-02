@@ -1,6 +1,6 @@
 Flask==1.1.2
 opencv_contrib_python==4.2.0.34
-Werkzeug==1.0.1
+Werkzeug==2.2.3
 tensorflow==2.2.0
 Keras==2.3.1
 mtcnn==0.1.0
